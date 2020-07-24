@@ -1,0 +1,39 @@
+{
+    "name": "adamsmith-book-api",
+    "version": "1.0.0",
+    "description": "Tutorial from the Pro MERN Stack API",
+    "main": "index.js",
+    "engines": {
+        "node": "10.x",
+        "npm": "6.x"
+    },
+    "scripts": {
+        "start": "nodemon -e js,graphql -w . -w .env server.js",
+        "lint": "eslint .",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.ccs.neu.edu/NEU-CS5610-SU20/AdamSmith-Book.git"
+    },
+    "author": "Adam Smith",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-server-express": "^2.13.1",
+        "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.5",
+        "cors": "^2.8.5",
+        "dotenv": "^6.2.0",
+        "express": "^4.17.1",
+        "google-auth-library": "^2.0.2",
+        "graphql": "^14.2.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongodb": "^3.5.9",
+        "nodemon": "^2.0.4"
+    },
+    "devDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.2.0",
+        "eslint-plugin-import": "^2.21.2"
+    }
+}
