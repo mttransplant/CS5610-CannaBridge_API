@@ -2,12 +2,12 @@
 * Run using the mongo shell. For remote databases, ensure that the
 * connection string is supplied in the command line. For example:
 * localhost:
-*   mongo issuetracker scripts/init.mongo.js
+*   mongo cannabridge scripts/init.mongo.js
 * Atlas:
-*   mongo mongodb+srv://user:pwd@xxx.mongodb.net/issuetracker
+*   mongo mongodb+srv://user:pwd@xxx.mongodb.net/cannabridge
 *   scripts/init.mongo.js
 * MLab:
-*   mongo mongodb://user:pwd@xxx.mlab.com:33533/issuetracker
+*   mongo mongodb://user:pwd@xxx.mlab.com:33533/cannabridge
 *   scripts/init.mongo.js
 */
 
@@ -15,49 +15,80 @@
 /* global db print */
 /* eslint no-restricted-globals: "off" */
 
-db.issues.remove({});
-db.deleted_issues.remove({});
+// Establish products baseline data
+db.products.remove({});
 
-const issuesDB = [{
-  id: 1,
-  status: 'New',
-  owner: 'Ravan',
-  effort: 5,
-  created: new Date('2019-01-15'),
-  due: undefined,
-  title: 'Error in console when clicking Add',
-  description: 'Steps to recreate the prblem:'
-  + '\n1. Refresh the browser.'
-  + '\n2. Select "New" in the filter'
-  + '\n3. Refresh the browser again. Note the warning in the console.'
-  + '\n   Warning: Hash history cannot PUSH the same path; a new entry'
-  + '\n   will not be added to the history stack'
-  + '\n5. There is an error in console, and add doesn\'t work.',
-},
-{
-  id: 2,
-  status: 'Assigned',
-  owner: 'Eddie',
-  effort: 14,
-  created: new Date('2019-01-16'),
-  due: new Date('2019-02-01'),
-  title: 'Missing bottom border on panel',
-  description: 'There needs to be a border in the bottom in the panel'
-  + ' that appears when clicking on Add',
-},
-];
+const producers = ['Producer A', 'Producer B', 'Producer C', 'Producer D', 'Producer E'];
+const types = ['Flower', 'Edible', 'Topical', 'Pre-Roll', 'Concentrate', 'Beverage'];
 
-db.issues.insertMany(issuesDB);
-const count = db.issues.count();
-print('Inserted', count, 'issues');
+for (let i = 0; i < 100; i += 1) {
+  const randomCreatedDate = (new Date()) - Math.floor(Math.random() * 60) * 1000 * 60 * 60 * 24;
+  const created = new Date(randomCreatedDate);
+  const poster = producers[Math.floor(Math.random() * 5)];
+  const type = types[Math.floor(Math.random() * 6)];
+  const quantity = Math.ceil(Math.random() * 20);
+  let unit;
+  let price;
+  switch (type) {
+    case 'Flower':
+    case 'Concentrate':
+    case 'Topical':
+      unit = 'oz';
+      price = Math.trunc(Math.random() * 75);
+      break;
+    default:
+      unit = 'ea';
+      price = Math.trunc(Math.random() * 15);
+  }
+  const title = `Product: ${type} - Lorem ipsum dolor sit amet, ${i}`;
+  const id = i + 1;
 
-db.counters.remove({ _id: 'issues' });
-db.counters.insert({ _id: 'issues', current: count });
+  const product = {
+    id, title, type, created, poster, quantity, unit, price,
+  };
 
-db.issues.createIndex({ id: 1 }, { unique: true });
-db.issues.createIndex({ title: 'text', description: 'text' });
-db.issues.createIndex({ status: 1 });
-db.issues.createIndex({ owner: 1 });
-db.issues.createIndex({ created: 1 });
+  db.products.insertOne(product);
+}
 
-db.deleted_issues.createIndex({ id: 1 }, { unique: true });
+const prodCount = db.products.count();
+db.counters.remove({ _id: 'products' });
+db.counters.insert({ _id: 'products', current: prodCount });
+print('New products count:', prodCount);
+
+db.products.createIndex({ id: 1 }, { unique: true });
+db.products.createIndex({ title: 'text', description: 'text' });
+db.products.createIndex({ type: 1 });
+db.products.createIndex({ poster: 1 });
+db.products.createIndex({ created: 1 });
+
+// Establish requests baseline data
+db.requests.remove({});
+
+const requestors = ['Requestor A', 'Requestor B', 'Requestor C', 'Requestor D', 'Requestor E'];
+
+for (let i = 0; i < 100; i += 1) {
+  const randomCreatedDate = (new Date()) - Math.floor(Math.random() * 60) * 1000 * 60 * 60 * 24;
+  const created = new Date(randomCreatedDate);
+  const poster = requestors[Math.floor(Math.random() * 5)];
+  const type = types[Math.floor(Math.random() * 6)];
+
+  const title = `Request: ${type} - Lorem ipsum dolor sit amet, ${i}`;
+  const id = i + 1;
+
+  const request = {
+    id, title, type, created, poster,
+  };
+
+  db.requests.insertOne(request);
+}
+
+const reqCount = db.requests.count();
+db.counters.remove({ _id: 'requests' });
+db.counters.insert({ _id: 'requests', current: reqCount });
+print('New requests count:', reqCount);
+
+db.requests.createIndex({ id: 1 }, { unique: true });
+db.requests.createIndex({ title: 'text', description: 'text' });
+db.requests.createIndex({ type: 1 });
+db.requests.createIndex({ poster: 1 });
+db.requests.createIndex({ created: 1 });
