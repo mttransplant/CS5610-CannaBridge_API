@@ -17,6 +17,7 @@
 
 // Establish products baseline data
 db.products.remove({});
+db.deleted_products.remove({});
 
 const producers = ['Producer A', 'Producer B', 'Producer C', 'Producer D', 'Producer E'];
 const types = ['Flower', 'Edible', 'Topical', 'Pre-Roll', 'Concentrate', 'Beverage'];
@@ -61,8 +62,11 @@ db.products.createIndex({ type: 1 });
 db.products.createIndex({ poster: 1 });
 db.products.createIndex({ created: 1 });
 
+db.deleted_products.createIndex({ id: 1 }, { unique: true });
+
 // Establish requests baseline data
 db.requests.remove({});
+db.deleted_requests.remove({});
 
 const requestors = ['Requestor A', 'Requestor B', 'Requestor C', 'Requestor D', 'Requestor E'];
 
@@ -92,3 +96,5 @@ db.requests.createIndex({ title: 'text', description: 'text' });
 db.requests.createIndex({ type: 1 });
 db.requests.createIndex({ poster: 1 });
 db.requests.createIndex({ created: 1 });
+
+db.deleted_requests.createIndex({ id: 1 }, { unique: true });
