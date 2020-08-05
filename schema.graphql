@@ -9,13 +9,22 @@ enum Type {
     Beverage
 }
 
+enum StatusType {
+    Listed
+    Unlisted
+}
+
 type Product {
     _id: ID!
     id: Int!
     title: String!
+    status: StatusType!
     type: Type!
     poster: String
     created: GraphQLDate!
+    quantity: Float
+    unit: String
+    price: Float
     description: String
 }
 
@@ -44,6 +53,7 @@ type User {
 "Toned down Product, used as inputs, without server generated values."
 input ProductInputs {
     title: String!
+    status: StatusType = Listed
     type: Type!
     poster: String!
     description: String
@@ -54,7 +64,11 @@ be set to the given value, undefined fields will remain unmodified."""
 input ProductUpdateInputs {
     title: String
     type: Type
+    status: StatusType
     poster: String
+    quanity: Float
+    unit: String
+    price: Float
     description: String
 }
 
