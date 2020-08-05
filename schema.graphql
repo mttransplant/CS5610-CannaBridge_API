@@ -57,6 +57,7 @@ input ProductInputs {
     type: Type!
     poster: String!
     description: String
+    quantity: Float
 }
 
 """"Inputs for productUpdate: all are optional. Whichever is specified will
