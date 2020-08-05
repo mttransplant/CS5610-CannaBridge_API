@@ -12,3 +12,8 @@ User Authentication: I am currently leaning toward [okata](https://developer.oka
 * [GroupProject-CannaBridge-UI Github](https://github.ccs.neu.edu/NEU-CS5610-SU20/GroupProject_CannaBridge_UI)
 * [CannaBridge UI on Heroku](https://cannabridge-ui-apsmith.herokuapp.com/)
 * [CannaBridge API/GraphQL Playground on Heroku](https://cannabridge-api-apsmith.herokuapp.com/graphql)
+
+## Screen Shots #Iter1
+![products](/readme_images/products.png)
+![requests](/readme_images/requests.png)
+![account](/readme_images/account.png)
