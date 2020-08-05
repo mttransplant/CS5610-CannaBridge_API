@@ -4,23 +4,23 @@ const { ApolloServer } = require('apollo-server-express');
 
 const GraphQLDate = require('./graphql_date.js');
 const about = require('./about.js');
-const issue = require('./issue.js');
+const product = require('./product.js');
 const auth = require('./auth.js');
 
 const resolvers = {
   Query: {
     about: about.getMessage,
     user: auth.resolveUser,
-    issueList: issue.list,
-    issue: issue.get,
-    issueCounts: issue.counts,
+    productList: product.list,
+    product: product.get,
+    productCounts: product.counts,
   },
   Mutation: {
     setAboutMessage: about.setMessage,
-    issueAdd: issue.add,
-    issueUpdate: issue.update,
-    issueDelete: issue.delete,
-    issueRestore: issue.restore,
+    productAdd: product.add,
+    productUpdate: product.update,
+    productDelete: product.delete,
+    productRestore: product.restore,
   },
   GraphQLDate,
 };
