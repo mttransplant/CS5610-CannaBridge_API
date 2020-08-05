@@ -41,8 +41,9 @@ for (let i = 0; i < 100; i += 1) {
       unit = 'ea';
       price = Math.trunc(Math.random() * 15);
   }
-  const title = `Product: ${type} - Lorem ipsum dolor sit amet, ${i}`;
   const id = i + 1;
+  const title = `Product: ${type} - Lorem ipsum dolor sit amet, ${id}`;
+
 
   const description = `Description for: ${title}`;
 
@@ -78,8 +79,8 @@ for (let i = 0; i < 100; i += 1) {
   const poster = requestors[Math.floor(Math.random() * 5)];
   const type = types[Math.floor(Math.random() * 6)];
 
-  const title = `Request: ${type} - Lorem ipsum dolor sit amet, ${i}`;
   const id = i + 1;
+  const title = `Request: ${type} - Lorem ipsum dolor sit amet, ${id}`;
 
   const description = `Description for: ${title}`;
 
