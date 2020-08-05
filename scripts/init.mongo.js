@@ -20,7 +20,7 @@ db.products.remove({});
 db.deleted_products.remove({});
 
 const producers = ['Producer A', 'Producer B', 'Producer C', 'Producer D', 'Producer E'];
-const types = ['Flower', 'Edible', 'Topical', 'Pre-Roll', 'Concentrate', 'Beverage'];
+const types = ['Flower', 'Edible', 'Topical', 'PreRoll', 'Concentrate', 'Beverage'];
 
 for (let i = 0; i < 100; i += 1) {
   const randomCreatedDate = (new Date()) - Math.floor(Math.random() * 60) * 1000 * 60 * 60 * 24;
@@ -44,8 +44,10 @@ for (let i = 0; i < 100; i += 1) {
   const title = `Product: ${type} - Lorem ipsum dolor sit amet, ${i}`;
   const id = i + 1;
 
+  const description = `Description for: ${title}`;
+
   const product = {
-    id, title, type, created, poster, quantity, unit, price,
+    id, title, type, created, poster, quantity, unit, price, description,
   };
 
   db.products.insertOne(product);
@@ -79,8 +81,10 @@ for (let i = 0; i < 100; i += 1) {
   const title = `Request: ${type} - Lorem ipsum dolor sit amet, ${i}`;
   const id = i + 1;
 
+  const description = `Description for: ${title}`;
+
   const request = {
-    id, title, type, created, poster,
+    id, title, type, created, poster, description,
   };
 
   db.requests.insertOne(request);
