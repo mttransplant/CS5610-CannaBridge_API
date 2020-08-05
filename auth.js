@@ -74,12 +74,15 @@ routes.post('/user', (req, res) => {
 });
 
 function mustBeSignedIn(resolver) {
-  return (root, args, { user }) => {
-    if (!user || !user.signedIn) {
-      throw new AuthenticationError('You must be signed in');
-    }
-    return resolver(root, args, { user });
-  };
+  // TODO: Re-enable when authentication is implemented
+
+  // return (root, args, { user }) => {
+  //   if (!user || !user.signedIn) {
+  //     throw new AuthenticationError('You must be signed in');
+  //   }
+  //   return resolver(root, args, { user });
+  // };
+  return (root, args, { user }) => resolver(root, args, { user });
 }
 
 function resolveUser(_, args, { user }) {
