@@ -1,35 +1,16 @@
 const { UserInputError } = require('apollo-server-express');
-const { getDb, getNextSequence } = require('./db.js');
 const { mustBeSignedIn } = require('./auth.js');
+const item = require('./item.js');
 
-async function get(_, { id }) {
-  const db = getDb();
-  const issue = await db.collection('products').findOne({ id });
-  return issue;
+const collection = 'products';
+
+async function get(e, { id }) {
+  const product = await item.get(e, { id }, collection);
+  return product;
 }
 
-const PAGE_SIZE = 10;
-
-async function list(_, {
-  type, dateMin, dateMax, search, page,
-}) {
-  const db = getDb();
-  const filter = {};
-  if (type) filter.type = type;
-  if (dateMin !== undefined || dateMax !== undefined) {
-    filter.effort = {};
-    if (dateMin !== undefined) filter.effort.$gte = dateMin;
-    if (dateMax !== undefined) filter.effort.$lte = dateMax;
-  }
-  if (search) filter.$text = { $search: search };
-  const cursor = db.collection('products').find(filter)
-    .sort({ id: 1 })
-    .skip(PAGE_SIZE * (page - 1))
-    .limit(PAGE_SIZE);
-
-  const totalCount = await cursor.count(false);
-  const products = cursor.toArray();
-  const pages = Math.ceil(totalCount / PAGE_SIZE);
+async function list(e, params) {
+  const { items: products, pages } = await item.list(e, params, collection);
   return { products, pages };
 }
 
@@ -49,87 +30,35 @@ function validate(product) {
   }
 }
 
-async function add(_, { product }) {
-  const db = getDb();
+async function add(e, { product }) {
   validate(product);
-  const newProduct = Object.assign({}, product);
-  newProduct.created = new Date();
-  newProduct.id = await getNextSequence('products');
-  const result = await db.collection('products').insertOne(newProduct);
-  const savedProduct = await db.collection('products').findOne({ _id: result.insertedId });
+  const savedProduct = await item.add(e, product, collection);
   return savedProduct;
 }
 
-async function update(_, { id, changes }) {
-  const db = getDb();
-  if (changes.title || changes.type || changes.poster) {
-    const product = await db.collection('products').findOne({ id });
+async function update(e, { id, changes }) {
+  if (changes.title || changes.quantity || changes.price) {
+    const product = await get(e, { id });
     Object.assign(product, changes);
     validate(product);
   }
-  await db.collection('products').updateOne({ id }, { $set: changes });
-  const savedProduct = await db.collection('products').findOne({ id });
+  const savedProduct = await item.update(e, { id, changes }, collection);
   return savedProduct;
 }
 
-async function remove(_, { id }) {
-  const db = getDb();
-  const product = await db.collection('products').findOne({ id });
-  if (!product) return false;
-  product.deleted = new Date();
-
-  let result = await db.collection('deleted_products').insertOne(product);
-  if (result.insertedId) {
-    result = await db.collection('products').removeOne({ id });
-    return result.deletedCount === 1;
-  }
-  return false;
+async function remove(e, params) {
+  const result = await item.remove(e, params, collection);
+  return result;
 }
 
-async function restore(_, { id }) {
-  const db = getDb();
-  const product = await db.collection('deleted_products').findOne({ id });
-  if (!product) return false;
-  product.deleted = new Date();
-
-  let result = await db.collection('products').insertOne(product);
-  if (result.insertedId) {
-    result = await db.collection('deleted_products').removeOne({ id });
-    return result.deletedCount === 1;
-  }
-  return false;
+async function restore(e, params) {
+  const result = await item.restore(e, params, collection);
+  return result;
 }
 
-async function counts(_, { type, dateMin, dateMax }) {
-  const db = getDb();
-  const filter = {};
-
-  if (type) filter.type = type;
-
-  if (dateMin !== undefined || dateMax !== undefined) {
-    filter.effort = {};
-    if (dateMin !== undefined) filter.effort.$gte = dateMin;
-    if (dateMax !== undefined) filter.effort.$lte = dateMax;
-  }
-
-  const results = await db.collection('products').aggregate([
-    { $match: filter },
-    {
-      $group: {
-        _id: { poster: '$poster', type: '$type' },
-        count: { $sum: 1 },
-      },
-    },
-  ]).toArray();
-
-  const stats = {};
-  results.forEach((result) => {
-    // eslint-disable-next-line no-underscore-dangle
-    const { poster, type: typeKey } = result._id;
-    if (!stats[poster]) stats[poster] = { poster };
-    stats[poster][typeKey] = result.count;
-  });
-  return Object.values(stats);
+async function counts(e, params) {
+  const result = await item.counts(e, params, collection);
+  return result;
 }
 
 module.exports = {
