@@ -122,29 +122,29 @@ type Query {
     user: User!
     productList(
         type: Type
-        dateMin: Int
-        dateMax: Int
+        dateMin: GraphQLDate
+        dateMax: GraphQLDate
         search: String
         page: Int = 1
     ): ProductListWithPages
     product(id: Int!): Product!
     productCounts(
         type: Type
-        dateMin: Int
-        dateMax: Int
+        dateMin: GraphQLDate
+        dateMax: GraphQLDate
     ): [ProductCounts!]!
     requestList(
         type: Type
-        dateMin: Int
-        dateMax: Int
+        dateMin: GraphQLDate
+        dateMax: GraphQLDate
         search: String
         page: Int = 1
     ): RequestListWithPages
     request(id: Int!): Request!
     requestCounts(
         type: Type
-        dateMin: Int
-        dateMax: Int
+        dateMin: GraphQLDate
+        dateMax: GraphQLDate
     ): [RequestCounts!]!
 }
 type Mutation {

@@ -1,4 +1,5 @@
 const { getDb, getNextSequence } = require('./db.js');
+const GraphQLDate = require('./graphql_date.js');
 
 async function get(_, { id }, collection) {
   const db = getDb();
@@ -15,9 +16,12 @@ async function list(_, {
   const filter = {};
   if (type) filter.type = type;
   if (dateMin !== undefined || dateMax !== undefined) {
-    filter.date = {};
-    if (dateMin !== undefined) filter.date.$gte = dateMin;
-    if (dateMax !== undefined) filter.date.$lte = dateMax;
+    filter.created = {};
+    // console.log(`dateMin is: ${dateMin}`);
+    // console.log(`dateMax is: ${dateMax}`);
+    if (dateMin !== undefined) filter.created.$gte = GraphQLDate.parseValue(dateMin);
+    if (dateMax !== undefined) filter.created.$lte = GraphQLDate.parseValue(dateMax);
+    // console.log(filter);
   }
   if (search) filter.$text = { $search: search };
   const cursor = db.collection(collection).find(filter)
