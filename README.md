@@ -17,3 +17,9 @@ User Authentication: I am currently leaning toward [okata](https://developer.oka
 ![products](/readme_images/products.png)
 ![requests](/readme_images/requests.png)
 ![account](/readme_images/account.png)
+
+## Screen Shots #Iter2
+![productsList](/readme_images/productsList.png)
+![editProduct](/readme_images/editProduct.png)
+![requestsList](/readme_images/requestsList.png)
+![createRequest](/readme_images/accountList.png)
