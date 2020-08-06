@@ -43,12 +43,11 @@ for (let i = 0; i < 100; i += 1) {
   }
   const id = i + 1;
   const title = `Product: ${type} - Lorem ipsum dolor sit amet, ${id}`;
-
-
   const description = `Description for: ${title}`;
+  const status = 'Listed';
 
   const product = {
-    id, title, type, created, poster, quantity, unit, price, description,
+    id, title, type, created, poster, quantity, unit, price, description, status,
   };
 
   db.products.insertOne(product);
@@ -64,6 +63,7 @@ db.products.createIndex({ title: 'text', description: 'text' });
 db.products.createIndex({ type: 1 });
 db.products.createIndex({ poster: 1 });
 db.products.createIndex({ created: 1 });
+db.products.createIndex({ status: 1 });
 
 db.deleted_products.createIndex({ id: 1 }, { unique: true });
 
@@ -81,11 +81,11 @@ for (let i = 0; i < 100; i += 1) {
 
   const id = i + 1;
   const title = `Request: ${type} - Lorem ipsum dolor sit amet, ${id}`;
-
   const description = `Description for: ${title}`;
+  const status = 'Listed';
 
   const request = {
-    id, title, type, created, poster, description,
+    id, title, type, created, poster, description, status,
   };
 
   db.requests.insertOne(request);
