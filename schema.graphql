@@ -28,7 +28,28 @@ type Product {
     description: String
 }
 
+type Request {
+    _id: ID!
+    id: Int!
+    title: String!
+    status: StatusType!
+    type: Type!
+    poster: String
+    created: GraphQLDate!
+    description: String
+}
+
 type ProductCounts {
+    poster: String!
+    Flower: Int
+    Edible: Int
+    Topical: Int
+    PreRoll: Int
+    Concentrate: Int
+    Beverage: Int
+}
+
+type RequestCounts {
     poster: String!
     Flower: Int
     Edible: Int
@@ -40,6 +61,11 @@ type ProductCounts {
 
 type ProductListWithPages {
     products: [Product!]!
+    pages: Int
+}
+
+type RequestListWithPages {
+    requests: [Request!]!
     pages: Int
 }
 
@@ -60,6 +86,14 @@ input ProductInputs {
     quantity: Float
 }
 
+input RequestInputs {
+    title: String!
+    status: StatusType = Listed
+    type: Type!
+    poster: String!
+    description: String
+}
+
 """"Inputs for productUpdate: all are optional. Whichever is specified will
 be set to the given value, undefined fields will remain unmodified."""
 input ProductUpdateInputs {
@@ -70,6 +104,14 @@ input ProductUpdateInputs {
     quantity: Float
     unit: String
     price: Float
+    description: String
+}
+
+input RequestUpdateInputs {
+    title: String
+    type: Type
+    status: StatusType
+    poster: String
     description: String
 }
 
@@ -91,6 +133,19 @@ type Query {
         dateMin: Int
         dateMax: Int
     ): [ProductCounts!]!
+    requestList(
+        type: Type
+        dateMin: Int
+        dateMax: Int
+        search: String
+        page: Int = 1
+    ): RequestListWithPages
+    request(id: Int!): Request!
+    requestCounts(
+        type: Type
+        dateMin: Int
+        dateMax: Int
+    ): [RequestCounts!]!
 }
 type Mutation {
     setAboutMessage(message: String!): String
@@ -98,4 +153,9 @@ type Mutation {
     productUpdate(id: Int!, changes: ProductUpdateInputs!): Product!
     productDelete(id: Int!): Boolean!
     productRestore(id: Int!): Boolean!
+
+    requestAdd(request: RequestInputs!): Request!
+    requestUpdate(id: Int!, changes: RequestUpdateInputs!): Request!
+    requestDelete(id: Int!): Boolean!
+    requestRestore(id: Int!): Boolean!
 }
