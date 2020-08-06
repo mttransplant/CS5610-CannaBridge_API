@@ -5,13 +5,13 @@ const item = require('./item.js');
 const collection = 'requests';
 
 async function get(e, { id }) {
-  const product = await item.get(e, { id }, collection);
-  return product;
+  const request = await item.get(e, { id }, collection);
+  return request;
 }
 
 async function list(e, params) {
-  const { items: products, pages } = await item.list(e, params, collection);
-  return { products, pages };
+  const { items: requests, pages } = await item.list(e, params, collection);
+  return { requests, pages };
 }
 
 function validate(request) {
@@ -35,9 +35,9 @@ async function update(e, { id, changes }) {
   // TODO: Add in options for other validated fields
   // if (changes.title || changes.quantity || changes.price) {
   if (changes.title) {
-    const product = await get(e, { id });
-    Object.assign(product, changes);
-    validate(product);
+    const request = await get(e, { id });
+    Object.assign(request, changes);
+    validate(request);
   }
   const savedProduct = await item.update(e, { id, changes }, collection);
   return savedProduct;

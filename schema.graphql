@@ -153,7 +153,6 @@ type Mutation {
     productUpdate(id: Int!, changes: ProductUpdateInputs!): Product!
     productDelete(id: Int!): Boolean!
     productRestore(id: Int!): Boolean!
-
     requestAdd(request: RequestInputs!): Request!
     requestUpdate(id: Int!, changes: RequestUpdateInputs!): Request!
     requestDelete(id: Int!): Boolean!
