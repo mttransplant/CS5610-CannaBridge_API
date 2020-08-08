@@ -6,6 +6,7 @@ const GraphQLDate = require('./graphql_date.js');
 const about = require('./about.js');
 const product = require('./product.js');
 const request = require('./request.js');
+const productImage = require('./product_image.js');
 const auth = require('./auth.js');
 
 const resolvers = {
@@ -18,6 +19,7 @@ const resolvers = {
     requestList: request.list,
     request: request.get,
     requestCounts: request.counts,
+    productImage: productImage.get,
   },
   Mutation: {
     setAboutMessage: about.setMessage,
@@ -29,6 +31,10 @@ const resolvers = {
     requestUpdate: request.update,
     requestDelete: request.delete,
     requestRestore: request.restore,
+    productImageAdd: productImage.add,
+    productImageUpdate: productImage.update,
+    productImageDelete: productImage.delete,
+    productImageRestore: productImage.restore,
   },
   GraphQLDate,
 };
