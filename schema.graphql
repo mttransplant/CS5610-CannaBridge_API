@@ -70,10 +70,14 @@ type RequestListWithPages {
 }
 
 type User {
-    signedIn: Boolean!
-    givenName: String
-    name: String
-    email: String
+    _id: ID!
+    id: Int!
+    username: String!
+}
+
+type LoginResponse {
+    token: String
+    user: User
 }
 
 "Toned down Product, used as inputs, without server generated values."
@@ -157,4 +161,6 @@ type Mutation {
     requestUpdate(id: Int!, changes: RequestUpdateInputs!): Request!
     requestDelete(id: Int!): Boolean!
     requestRestore(id: Int!): Boolean!
+    register(username: String!, password: String!): User!
+    login(username:String!, password: String!): LoginResponse!
 }
