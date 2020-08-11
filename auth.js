@@ -74,13 +74,13 @@ routes.post('/signin', async (req, res) => {
   const db = getDb();
   const user = await db.collection(collection).findOne({ username });
   if (!user) {
-    throw new AuthenticationError('Invalid Login');
+    throw new AuthenticationError('Invalid User or Password');
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!passwordMatch) {
-    throw new AuthenticationError('Invalid Login');
+    throw new AuthenticationError('Invalid User or Password');
   }
 
   const credentials = {
