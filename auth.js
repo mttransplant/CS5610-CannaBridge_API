@@ -50,17 +50,22 @@ routes.post('/signin', async (req, res) => {
 
   const { username, password } = req.body.user;
   const db = getDb();
+
   const user = await db.collection(collection).findOne({ username });
   if (!user) {
-    throw new AuthenticationError('Invalid User or Password');
-    // return res.status(400).send({ error: 'Invalid Username or Password' });
+    // return res.status(400).json({ error: 'Invalid Username or Password' });
+    // throw new Error('Invalid Username');
+    // throw new AuthenticationError('Invalid User or Password');
+    return res.status(401).send({ error: 'Invalid Username or Password' });
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!passwordMatch) {
-    throw new AuthenticationError('Invalid User or Password');
-    // return res.status(400).send({ error: 'Invalid Username or Password' });
+    // throw new Error('Invalid Password');
+    // return res.status(400).json({ error: 'Invalid Username or Password' });
+    // throw new AuthenticationError('Invalid User or Password');
+    return res.status(401).send({ error: 'Invalid Username or Password' });
   }
 
   const credentials = {
@@ -78,7 +83,7 @@ routes.post('/signin', async (req, res) => {
 
   res.cookie('jwt', token, { httpOnly: true, domain: process.env.COOKIE_DOMAIN });
 
-  res.json(credentials);
+  return res.json(credentials);
 });
 
 routes.post('/signout', async (req, res) => {
@@ -91,15 +96,12 @@ routes.post('/user', (req, res) => {
 });
 
 function mustBeSignedIn(resolver) {
-  // TODO: Re-enable when authentication is implemented
-
-  // return (root, args, { user }) => {
-  //   if (!user || !user.signedIn) {
-  //     throw new AuthenticationError('You must be signed in');
-  //   }
-  //   return resolver(root, args, { user });
-  // };
-  return (root, args, { user }) => resolver(root, args, { user });
+  return (root, args, { user }) => {
+    if (!user || !user.signedIn) {
+      throw new AuthenticationError('You must be signed in');
+    }
+    return resolver(root, args, { user });
+  };
 }
 
 function resolveUser(_, args, { user }) {

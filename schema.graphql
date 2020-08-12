@@ -14,6 +14,11 @@ enum StatusType {
     Unlisted
 }
 
+enum BusinessType {
+    Dispensary
+    Cultivator
+}
+
 type Product {
     _id: ID!
     id: Int!
@@ -74,6 +79,14 @@ type User {
     id: Int!
     signedIn: Boolean!
     username: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    phone: String!
+    email: String!
+    businessName: String!
+    businessWebsite: String!
+    businessType: BusinessType!
 }
 
 type LoginResponse {
@@ -120,6 +133,18 @@ input RequestUpdateInputs {
     description: String
 }
 
+input NewUserInputs {
+    username: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    phone: String!
+    email: String!
+    businessName: String!
+    businessWebsite: String!
+    businessType: BusinessType!
+}
+
 #### Top level declarations
 
 type Query {
@@ -162,6 +187,6 @@ type Mutation {
     requestUpdate(id: Int!, changes: RequestUpdateInputs!): Request!
     requestDelete(id: Int!): Boolean!
     requestRestore(id: Int!): Boolean!
-    register(username: String!, password: String!): User!
+    register(newUser: NewUserInputs!): User!
     login(username:String!, password: String!): LoginResponse!
 }
