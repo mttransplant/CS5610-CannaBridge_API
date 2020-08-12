@@ -34,6 +34,8 @@ async function register(parent, { username, password }) {
 
 function getUser(req) {
   const token = req.cookies.jwt;
+  // const tokenWithBearer = req.headers.authorization || '';
+  // const token = tokenWithBearer.split(' ')[1];
   if (!token) return { signedIn: false };
 
   try {
@@ -85,7 +87,6 @@ routes.post('/signin', async (req, res) => {
 
   const credentials = {
     signedIn: true,
-    id: user.id,
     username: user.username,
   };
 
