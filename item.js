@@ -17,11 +17,8 @@ async function list(_, {
   if (type) filter.type = type;
   if (dateMin !== undefined || dateMax !== undefined) {
     filter.created = {};
-    // console.log(`dateMin is: ${dateMin}`);
-    // console.log(`dateMax is: ${dateMax}`);
     if (dateMin !== undefined) filter.created.$gte = GraphQLDate.parseValue(dateMin);
     if (dateMax !== undefined) filter.created.$lte = GraphQLDate.parseValue(dateMax);
-    // console.log(filter);
   }
   if (search) filter.$text = { $search: search };
   const cursor = db.collection(collection).find(filter)

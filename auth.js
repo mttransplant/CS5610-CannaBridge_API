@@ -34,8 +34,6 @@ async function register(parent, { username, password }) {
 
 function getUser(req) {
   const token = req.cookies.jwt;
-  // const tokenWithBearer = req.headers.authorization || '';
-  // const token = tokenWithBearer.split(' ')[1];
   if (!token) return { signedIn: false };
 
   try {
@@ -50,27 +48,6 @@ routes.post('/signin', async (req, res) => {
   if (!JWT_SECRET) {
     res.status(500).send('Missing JWT_SECRET. Refusing to authenticate.');
   }
-  // const googleToken = req.body.google_token;
-  // if (!googleToken) {
-  //   res.status(400).send({ code: 400, message: 'Missing token' });
-  //   return;
-  // }
-
-  // const client = new OAuth2Client();
-  // let payload;
-  // try {
-  //   const ticket = await client.verifyIdToken({ idToken: googleToken });
-  //   payload = ticket.getPayload();
-  // } catch (error) {
-  //   res.status(403).send('Invalid credentials');
-  // }
-
-  // const { given_name: givenName, name, email } = payload;
-  // const credentials = {
-  //   signedIn: true, givenName, name, email,
-  // };
-
-  // const token = jwt.sign(credentials, JWT_SECRET);
 
   const { username, password } = req.body.user;
   const db = getDb();
@@ -125,8 +102,6 @@ function mustBeSignedIn(resolver) {
 }
 
 function resolveUser(_, args, { user }) {
-  console.log('In auth.resolveUser, returning:');
-  console.log(user);
   return user;
 }
 
