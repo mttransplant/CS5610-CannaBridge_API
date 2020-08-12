@@ -11,7 +11,6 @@
 *   scripts/init.mongo.js
 */
 
-
 /* global db print */
 /* eslint no-restricted-globals: "off" */
 
@@ -103,3 +102,30 @@ db.requests.createIndex({ poster: 1 });
 db.requests.createIndex({ created: 1 });
 
 db.deleted_requests.createIndex({ id: 1 }, { unique: true });
+
+// Establish users baseline data
+db.users.remove({});
+
+const adam = {
+  username: 'apsmith',
+  password: '$2a$10$Gf4kthdznddqTPO/8ITrKegDki2ScnpBAgq.AF6sXbWwReczjTR4a',
+  firstName: 'Adam',
+  lastName: 'Smith',
+  phone: '123-456-7890',
+  email: 'smith.ad@husky.neu.edu',
+  businessName: 'In it to win it',
+  businessWebsite: 'http://www.inittowinit.com',
+  businessType: 'Dispensary',
+};
+adam.created = new Date();
+
+db.users.insertOne(adam);
+
+const userCount = db.users.count();
+db.counters.remove({ _id: 'users' });
+db.counters.insert({ _id: 'users', current: userCount });
+print('New users count:', userCount);
+
+db.users.createIndex({ username: 1 }, { unique: true });
+db.users.createIndex({ businessType: 1 });
+db.users.createIndex({ created: 1 });
