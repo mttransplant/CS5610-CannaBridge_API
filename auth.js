@@ -44,7 +44,7 @@ function validate(newUser) {
   // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of Object.entries(newUser)) {
     // console.log(`Evaluating key ${key} and value ${value}`);
-    if (value === null || value.length === 0) {
+    if (value === null || value.trim().length === 0) {
       errors.push(`Field "${key}" cannot be empty.`);
     }
   }
