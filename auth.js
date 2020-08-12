@@ -70,7 +70,7 @@ routes.post('/signin', async (req, res) => {
 
   const credentials = {
     signedIn: true,
-    username: user.username,
+    firstName: user.firstName,
   };
 
   const token = jwt.sign(

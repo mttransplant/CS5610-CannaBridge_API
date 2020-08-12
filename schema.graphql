@@ -76,7 +76,6 @@ type RequestListWithPages {
 
 type User {
     _id: ID!
-    id: Int!
     signedIn: Boolean!
     username: String!
     password: String!
