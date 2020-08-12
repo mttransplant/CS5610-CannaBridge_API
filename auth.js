@@ -1,6 +1,5 @@
 const Router = require('express');
 const bodyParser = require('body-parser');
-// const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 const cors = require('cors');
@@ -54,12 +53,14 @@ routes.post('/signin', async (req, res) => {
   const user = await db.collection(collection).findOne({ username });
   if (!user) {
     throw new AuthenticationError('Invalid User or Password');
+    // return res.status(400).send({ error: 'Invalid Username or Password' });
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!passwordMatch) {
     throw new AuthenticationError('Invalid User or Password');
+    // return res.status(400).send({ error: 'Invalid Username or Password' });
   }
 
   const credentials = {
