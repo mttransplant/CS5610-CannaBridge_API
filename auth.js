@@ -2,6 +2,7 @@ const Router = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
+const { UserInputError } = require('apollo-server-express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { add } = require('./item.js');
@@ -25,9 +26,67 @@ routes.use(bodyParser.json());
 const origin = process.env.UI_SERVER_ORIGIN || 'http://localhost:8000';
 routes.use(cors({ origin, credentials: true }));
 
-async function register(parent, { username, password }) {
+function validate(newUser) {
+  // console.log('Entered validate');
+  const errors = [];
+  // console.log('data of newAccount inside validate');
+  // console.log(newUser);
+
+  function validateEmail(email) {
+    // the following line apparently has unnecessary escape characters
+    // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return (true);
+    }
+    return (false);
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, value] of Object.entries(newUser)) {
+    // console.log(`Evaluating key ${key} and value ${value}`);
+    if (value === null || value.length === 0) {
+      errors.push(`Field "${key}" cannot be empty.`);
+    }
+  }
+
+  if (newUser.password.length < 8) {
+    errors.push('Password must be at least 8 characters long.');
+  }
+  if (!validateEmail(newUser.email)) {
+    errors.push('Please enter a valid email address.');
+  }
+  // console.log(`finished validation with ${errors.length} errors.`);
+  if (errors.length > 0) {
+    throw new UserInputError('Invalid input(s)', { errors });
+  }
+}
+
+async function register(parent, { newAccount: newUser }) {
+  // console.log('data of newUser');
+  // console.log(newUser);
+  validate(newUser);
+  // console.log('have returned to "register" from "validate"');
+  const {
+    username, password, firstName, lastName, phone,
+    email, businessName, businessWebsite, businessType,
+  } = newUser;
+
+  // console.log(`about to hash password: ${password}`);
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await add(parent, { username, password: hashedPassword }, collection);
+  // console.log('password has been hashed');
+  const user = await add(parent,
+    {
+      username,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      phone,
+      email,
+      businessName,
+      businessWebsite,
+      businessType,
+    },
+    collection);
   return user;
 }
 

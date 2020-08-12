@@ -133,15 +133,15 @@ input RequestUpdateInputs {
 }
 
 input NewUserInputs {
-    username: String!
-    password: String!
-    firstName: String!
-    lastName: String!
-    phone: String!
-    email: String!
-    businessName: String!
-    businessWebsite: String!
-    businessType: BusinessType!
+    username: String
+    password: String
+    firstName: String
+    lastName: String
+    phone: String
+    email: String
+    businessName: String
+    businessWebsite: String
+    businessType: BusinessType
 }
 
 #### Top level declarations
@@ -186,6 +186,6 @@ type Mutation {
     requestUpdate(id: Int!, changes: RequestUpdateInputs!): Request!
     requestDelete(id: Int!): Boolean!
     requestRestore(id: Int!): Boolean!
-    register(newUser: NewUserInputs!): User!
+    register(newAccount: NewUserInputs!): User!
     login(username:String!, password: String!): LoginResponse!
 }
