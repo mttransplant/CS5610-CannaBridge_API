@@ -39,8 +39,8 @@ async function update(e, { id, changes }) {
     Object.assign(request, changes);
     validate(request);
   }
-  const savedProduct = await item.update(e, { id, changes }, collection);
-  return savedProduct;
+  const savedReqeust = await item.update(e, { id, changes }, collection);
+  return savedReqeust;
 }
 
 async function remove(e, params) {
