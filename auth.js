@@ -130,6 +130,8 @@ routes.post('/signin', async (req, res) => {
   const credentials = {
     signedIn: true,
     firstName: user.firstName,
+    businessType: user.businessType,
+    username: user.username,
   };
 
   const token = jwt.sign(
