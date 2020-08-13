@@ -154,6 +154,7 @@ type Query {
         dateMin: GraphQLDate
         dateMax: GraphQLDate
         search: String
+        username: String
         page: Int = 1
     ): ProductListWithPages
     product(id: Int!): Product!
@@ -167,6 +168,7 @@ type Query {
         dateMin: GraphQLDate
         dateMax: GraphQLDate
         search: String
+        username: String
         page: Int = 1
     ): RequestListWithPages
     request(id: Int!): Request!
