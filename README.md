@@ -26,5 +26,5 @@ User Authentication: I am currently leaning toward [okata](https://developer.oka
 
 ## Screen Shots #Iter3
 ![homePage](/readme_images/home.png)
-![signIn](/readme_images/singin.png)
+![signIn](/readme_images/signin.png)
 ![authenticated](/readme_images/authenticated.png)
