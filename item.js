@@ -45,8 +45,8 @@ async function add(_, item, collection) {
 async function update(_, { id, changes }, collection) {
   const db = getDb();
   await db.collection(collection).updateOne({ id }, { $set: changes });
-  const savedProduct = await db.collection(collection).findOne({ id });
-  return savedProduct;
+  const savedItem = await db.collection(collection).findOne({ id });
+  return savedItem;
 }
 
 async function remove(_, { id }, collection) {
